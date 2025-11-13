@@ -9,6 +9,56 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
+}
+
+model Notebook {
+  id           String         @id @default(cuid())
+  title        String
+  description  String?
+  userId       String
+  tags         Json?          @default("[]") 
+  coverImage   String?
+  visibility   Visibility     @default(PRIVATE)
+  status       NotebookStatus @default(DRAFT)
+  documents    Json?
+  settings     Json?
+  lastEditedBy String?
+  lastEditedAt DateTime?
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  cells Cell[]
+}
+
+enum Visibility {
+  PRIVATE
+  PUBLIC
+  SHARED
+}
+
+enum NotebookStatus {
+  DRAFT
+  ACTIVE
+  ARCHIVED
+}
+
+model Cell {
+  id         String   @id @default(cuid())
+  notebookId String
+  type       CellType @default(TEXT)
+  content    String
+  metadata   Json?
+  order      Int
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  notebook Notebook @relation(fields: [notebookId], references: [id])
+}
+
+enum CellType {
+  TEXT
+  CODE
+  AI_RESPONSE
 }
