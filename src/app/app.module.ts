@@ -6,9 +6,14 @@ import { NotebooksModule } from 'src/notebooks/notebooks.module';
 import { UploadsModule } from 'src/uploads/uploads.module';
 import { AnalyzeModule } from 'src/analyze/analyze.module';
 import { CellModule } from 'src/cell/cell.module';
+import { AiModule } from 'src/ai/ai.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [PrismaModule, NotebooksModule, UploadsModule, CellModule, AnalyzeModule],
+  imports: [ConfigModule.forRoot({
+    isGlobal: true,
+    envFilePath: '.env',
+  }), PrismaModule, AiModule, AnalyzeModule, NotebooksModule, UploadsModule, CellModule],
   controllers: [AppController],
   providers: [AppService],
 })
