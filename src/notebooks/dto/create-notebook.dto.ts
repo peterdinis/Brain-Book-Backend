@@ -1,5 +1,4 @@
 import { IsString, IsOptional, IsEnum, IsArray, IsJSON } from 'class-validator';
-import { Type } from 'class-transformer';
 
 export enum Visibility {
   PUBLIC = 'PUBLIC',
