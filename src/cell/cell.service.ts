@@ -9,12 +9,14 @@ import { CreateCellDto } from './dto/create-cell.dto';
 import { UpdateCellDto } from './dto/update-cell.dto';
 import { BulkUpdateCellsDto } from './dto/bulk-update-cell.dto';
 import { BulkDeleteCellsDto } from './dto/bulk-delete-cell.dto';
+import { UploadService } from 'src/uploads/uploads.service';
 
 @Injectable()
 export class CellService {
   constructor(
     private prisma: PrismaService,
     private notebooksService: NotebooksService,
+    private uploadService: UploadService
   ) {}
 
   //------------------------------------------------------
