@@ -1,4 +1,4 @@
-import { PartialType } from "@nestjs/swagger";
-import { CreateNotebookDto } from "./create-notebook.dto";
+import { PartialType } from '@nestjs/swagger';
+import { CreateNotebookDto } from './create-notebook.dto';
 
 export class UpdateNotebookDto extends PartialType(CreateNotebookDto) {}
