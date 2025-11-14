@@ -6,7 +6,7 @@ import { Notebook, Prisma } from 'src/generated/browser';
 import { NotebookQueryDto } from './dto/pagination-notebook.dto';
 
 @Injectable()
-export class NotebookService {
+export class NotebooksService {
   constructor(private prisma: PrismaService) {}
 
   async create(dto: CreateNotebookDto): Promise<Notebook> {
