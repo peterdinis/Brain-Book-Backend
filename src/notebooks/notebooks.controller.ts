@@ -83,4 +83,20 @@ export class NotebooksController {
     ): Promise<Notebook> {
         return this.notebookService.updateStatus(id, statusDto);
     }
+
+    @Get('filter/status')
+    @ApiOperation({ summary: 'Filter notebooks by status with pagination' })
+    @ApiQuery({ name: 'status', description: 'Notebook status to filter', required: true })
+    @ApiQuery({ name: 'page', description: 'Page number', required: false, type: Number })
+    @ApiQuery({ name: 'limit', description: 'Items per page', required: false, type: Number })
+    @ApiResponse({ status: 200, description: 'Filtered notebooks returned' })
+    filterByStatus(
+        @Query('status') status: string,
+        @Query('page') page?: string,
+        @Query('limit') limit?: string,
+    ) {
+        const pageNumber = page ? parseInt(page, 10) : 1;
+        const limitNumber = limit ? parseInt(limit, 10) : 10;
+        return this.notebookService.findByStatus(status as any, pageNumber, limitNumber);
+    }
 }

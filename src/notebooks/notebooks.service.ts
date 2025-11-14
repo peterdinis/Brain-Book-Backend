@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException, InternalServerErrorException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { CreateNotebookDto } from './dto/create-notebook.dto';
+import { CreateNotebookDto, NotebookStatus } from './dto/create-notebook.dto';
 import { UpdateNotebookDto } from './dto/update-notebook.dto';
 import { Notebook, Prisma } from 'src/generated/browser';
 import { NotebookQueryDto } from './dto/pagination-notebook.dto';
@@ -89,4 +89,21 @@ export class NotebooksService {
             throw new InternalServerErrorException('Failed to update notebook status');
         }
     }
+
+    async findByStatus(status: NotebookStatus, page = 1, limit = 10): Promise<{ data: Notebook[]; total: number }> {
+        const skip = (page - 1) * limit;
+
+        const [data, total] = await Promise.all([
+            this.prisma.notebook.findMany({
+                where: { status },
+                skip,
+                take: limit,
+                orderBy: { updatedAt: 'desc' },
+            }),
+            this.prisma.notebook.count({ where: { status } }),
+        ]);
+
+        return { data, total };
+    }
+
 }
