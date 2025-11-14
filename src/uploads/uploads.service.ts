@@ -13,11 +13,13 @@ export class UploadService {
       storage: diskStorage({
         destination: (req, file, cb) => {
           const uploadPath = join(process.cwd(), destinationFolder);
-          if (!existsSync(uploadPath)) mkdirSync(uploadPath, { recursive: true });
+          if (!existsSync(uploadPath))
+            mkdirSync(uploadPath, { recursive: true });
           cb(null, uploadPath);
         },
         filename: (req, file, cb) => {
-          const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+          const uniqueSuffix =
+            Date.now() + '-' + Math.round(Math.random() * 1e9);
           const ext = file.originalname.split('.').pop();
           cb(null, `${uniqueSuffix}.${ext}`);
         },
@@ -61,12 +63,13 @@ export class UploadService {
     const files = readdirSync(this.uploadFolder);
 
     const matchedFiles = files
-      .filter(file => file.includes(searchTerm))
-      .map(file => join(this.uploadFolder, file))
-      .filter(filePath => 
-        this.isFileValid(filePath) &&
-        this.isAllowedExtension(filePath) &&
-        this.canReadFile(filePath)
+      .filter((file) => file.includes(searchTerm))
+      .map((file) => join(this.uploadFolder, file))
+      .filter(
+        (filePath) =>
+          this.isFileValid(filePath) &&
+          this.isAllowedExtension(filePath) &&
+          this.canReadFile(filePath),
       );
 
     return matchedFiles;
