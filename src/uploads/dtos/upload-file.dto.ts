@@ -5,6 +5,10 @@ export interface CustomFile extends File {
 }
 
 export class UploadFileDto {
-  @ApiProperty({ type: 'string', format: 'binary', description: 'File to upload' })
-  file: CustomFile
+  @ApiProperty({
+    type: 'string',
+    format: 'binary',
+    description: 'File to upload',
+  })
+  file: CustomFile;
 }
