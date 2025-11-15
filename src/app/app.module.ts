@@ -9,11 +9,18 @@ import { AiModule } from 'src/ai/ai.module';
 import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [ConfigModule.forRoot({
-    isGlobal: true,
-    envFilePath: '.env',
-  }), PrismaModule, AiModule, NotebooksModule, UploadsModule, CellModule],
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: '.env',
+    }),
+    PrismaModule,
+    AiModule,
+    NotebooksModule,
+    UploadsModule,
+    CellModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule { }
+export class AppModule {}
