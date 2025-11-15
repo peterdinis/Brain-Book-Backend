@@ -3,10 +3,9 @@ import { NotebooksModule } from "src/notebooks/notebooks.module";
 import { PrismaModule } from "src/prisma/prisma.module";
 import { CellController } from "./cell.controller";
 import { CellService } from "./cell.service";
-import { UploadsModule } from "src/uploads/uploads.module";
 
 @Module({
-    imports: [PrismaModule, NotebooksModule, UploadsModule],
+    imports: [PrismaModule, NotebooksModule],
     controllers: [CellController],
     providers: [CellService]
 })
