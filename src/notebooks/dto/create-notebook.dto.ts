@@ -1,16 +1,6 @@
-import { IsString, IsOptional, IsEnum, IsArray, IsJSON } from 'class-validator';
-
-export enum Visibility {
-  PUBLIC = 'PUBLIC',
-  PRIVATE = 'PRIVATE',
-  PROTECTED = 'PROTECTED',
-}
-
-export enum NotebookStatus {
-  DRAFT = 'DRAFT',
-  PUBLISHED = 'PUBLISHED',
-  ARCHIVED = 'ARCHIVED',
-}
+import { IsString, IsOptional, IsArray, IsEnum } from 'class-validator';
+import { Prisma } from 'src/generated/client';
+import { Visibility as PrismaVisibility, NotebookStatus as PrismaNotebookStatus } from 'src/generated/enums';
 
 export class CreateNotebookDto {
   @IsString()
@@ -33,18 +23,16 @@ export class CreateNotebookDto {
   coverImage?: string;
 
   @IsOptional()
-  @IsEnum(Visibility)
-  visibility?: Visibility = Visibility.PRIVATE;
+  @IsEnum(PrismaVisibility)
+  visibility?: PrismaVisibility = PrismaVisibility.PRIVATE;
 
   @IsOptional()
-  @IsEnum(NotebookStatus)
-  status?: NotebookStatus = NotebookStatus.DRAFT;
+  @IsEnum(PrismaNotebookStatus)
+  status?: PrismaNotebookStatus = PrismaNotebookStatus.DRAFT;
 
   @IsOptional()
-  @IsJSON()
-  documents?: Record<string, unknown>;
+  documents?: Prisma.InputJsonValue;
 
   @IsOptional()
-  @IsJSON()
-  settings?: Record<string, unknown>;
+  settings?: Prisma.InputJsonValue;
 }

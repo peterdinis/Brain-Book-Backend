@@ -7,5 +7,6 @@ import { NotebooksService } from './notebooks.service';
   imports: [PrismaModule],
   controllers: [NotebooksController],
   providers: [NotebooksService],
+  exports: [NotebooksService]
 })
 export class NotebooksModule {}
