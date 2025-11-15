@@ -76,9 +76,7 @@ export class CellService {
         data: dto,
       });
     } catch {
-      throw new InternalServerErrorException(
-        'Failed to update cell',
-      );
+      throw new InternalServerErrorException('Failed to update cell');
     }
   }
 

@@ -10,5 +10,4 @@ import { UploadsModule } from "src/uploads/uploads.module";
     controllers: [CellController],
     providers: [CellService]
 })
-
 export class CellModule {}
