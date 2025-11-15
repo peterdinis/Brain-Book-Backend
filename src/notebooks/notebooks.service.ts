@@ -4,12 +4,12 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { CreateNotebookDto, NotebookStatus } from './dto/create-notebook.dto';
+import { CreateNotebookDto} from './dto/create-notebook.dto';
 import { UpdateNotebookDto } from './dto/update-notebook.dto';
 import { Notebook, Prisma } from 'src/generated/browser';
 import { NotebookQueryDto } from './dto/pagination-notebook.dto';
 import { UpdateNotebookStatusDto } from './dto/update-notebook-status.dto';
-
+import { NotebookStatus as PrismaNotebookStatus } from 'src/generated/enums';
 @Injectable()
 export class NotebooksService {
   constructor(private prisma: PrismaService) {}
@@ -105,7 +105,7 @@ export class NotebooksService {
   }
 
   async findByStatus(
-    status: NotebookStatus,
+    status: PrismaNotebookStatus,
     page = 1,
     limit = 10,
   ): Promise<{ data: Notebook[]; total: number }> {

@@ -27,6 +27,7 @@ const config: runtime.GetPrismaClientConfig = {
       "fromEnvVar": null
     },
     "config": {
+      "moduleFormat": "cjs",
       "engineType": "library"
     },
     "binaryTargets": [
@@ -56,8 +57,8 @@ const config: runtime.GetPrismaClientConfig = {
       }
     }
   },
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider = \"prisma-client\"\n  output   = \"../src/generated\"\n}\n\ndatasource db {\n  provider = \"sqlite\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel Notebook {\n  id           String         @id @default(cuid())\n  title        String\n  description  String?\n  userId       String\n  tags         Json?          @default(\"[]\")\n  coverImage   String?\n  visibility   Visibility     @default(PRIVATE)\n  status       NotebookStatus @default(DRAFT)\n  documents    Json?\n  settings     Json?\n  lastEditedBy String?\n  lastEditedAt DateTime?\n  createdAt    DateTime       @default(now())\n  updatedAt    DateTime       @updatedAt\n  cells        Cell[]\n}\n\nenum Visibility {\n  PRIVATE\n  PUBLIC\n  SHARED\n}\n\nenum NotebookStatus {\n  DRAFT\n  ACTIVE\n  ARCHIVED\n}\n\nmodel Cell {\n  id         String   @id @default(cuid())\n  notebookId String\n  type       CellType @default(TEXT)\n  content    String\n  metadata   Json?\n  order      Int\n  createdAt  DateTime @default(now())\n  updatedAt  DateTime @updatedAt\n\n  notebook Notebook @relation(fields: [notebookId], references: [id])\n}\n\nenum CellType {\n  TEXT\n  CODE\n  AI_RESPONSE\n}\n",
-  "inlineSchemaHash": "82829ab3f8ac1ca0dd730387bd9b029f709f336443fdedb1859671311b26013f",
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\n// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?\n// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init\n\ngenerator client {\n  provider     = \"prisma-client\"\n  output       = \"../src/generated\"\n  moduleFormat = \"cjs\"\n}\n\ndatasource db {\n  provider = \"sqlite\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel Notebook {\n  id           String         @id @default(cuid())\n  title        String\n  description  String?\n  userId       String\n  tags         Json?          @default(\"[]\")\n  coverImage   String?\n  visibility   Visibility     @default(PRIVATE)\n  status       NotebookStatus @default(DRAFT)\n  documents    Json?\n  settings     Json?\n  lastEditedBy String?\n  lastEditedAt DateTime?\n  createdAt    DateTime       @default(now())\n  updatedAt    DateTime       @updatedAt\n  cells        Cell[]\n}\n\nenum Visibility {\n  PRIVATE\n  PUBLIC\n  SHARED\n}\n\nenum NotebookStatus {\n  DRAFT\n  ACTIVE\n  ARCHIVED\n}\n\nmodel Cell {\n  id         String   @id @default(cuid())\n  notebookId String\n  type       CellType @default(TEXT)\n  content    String\n  metadata   Json?\n  order      Int\n  createdAt  DateTime @default(now())\n  updatedAt  DateTime @updatedAt\n\n  notebook Notebook @relation(fields: [notebookId], references: [id])\n}\n\nenum CellType {\n  TEXT\n  CODE\n  AI_RESPONSE\n}\n",
+  "inlineSchemaHash": "b214f9a3d7e00a2d04a0f7b70cffe275fa38d2a7109960ff626f2ec7febadc21",
   "copyEngine": true,
   "runtimeDataModel": {
     "models": {},

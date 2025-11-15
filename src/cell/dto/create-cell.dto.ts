@@ -1,5 +1,6 @@
 import { IsEnum, IsOptional, IsString } from 'class-validator';
 import { CellType } from 'src/generated/enums';
+import { Prisma } from 'src/generated/client';
 
 export class CreateCellDto {
   @IsEnum(CellType)
@@ -9,5 +10,5 @@ export class CreateCellDto {
   content: string;
 
   @IsOptional()
-  metadata?: Record<string, unknown>;
+  metadata?: Prisma.InputJsonValue;
 }
