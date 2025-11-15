@@ -9,20 +9,31 @@ import { CreateCellDto } from './dto/create-cell.dto';
 import { UpdateCellDto } from './dto/update-cell.dto';
 import { BulkUpdateCellsDto } from './dto/bulk-update-cell.dto';
 import { BulkDeleteCellsDto } from './dto/bulk-delete-cell.dto';
-import { UploadService } from 'src/uploads/uploads.service';
+import { AwsService } from 'src/aws/aws.service';
+
+export interface UploadFile {
+  originalname: string;
+  buffer: Buffer;
+  mimetype: string;
+  size: number;
+}
 
 @Injectable()
 export class CellService {
   constructor(
     private prisma: PrismaService,
     private notebooksService: NotebooksService,
-    private uploadService: UploadService
+    private awsService: AwsService
   ) {}
 
   //------------------------------------------------------
   // CREATE CELL (append to end)
   //------------------------------------------------------
-  async create(notebookId: string, dto: CreateCellDto) {
+  async create(
+    notebookId: string,
+    dto: CreateCellDto,
+    file?: UploadFile
+  ) {
     await this.notebooksService.findOne(notebookId);
 
     const last = await this.prisma.cell.findFirst({
@@ -30,11 +41,23 @@ export class CellService {
       orderBy: { order: 'desc' },
     });
 
+    let content = dto.content;
+
+    // Upload file to S3 if provided
+    if (file) {
+      content = await this.awsService.uploadFile({
+        originalname: file.originalname,
+        buffer: file.buffer,
+        mimetype: file.mimetype,
+        size: file.size,
+      });
+    }
+
     return this.prisma.cell.create({
       data: {
         notebookId,
         type: dto.type,
-        content: dto.content,
+        content,
         metadata: dto.metadata,
         order: last ? last.order + 1 : 0,
       },
@@ -67,13 +90,28 @@ export class CellService {
   //------------------------------------------------------
   // UPDATE ONE CELL
   //------------------------------------------------------
-  async update(id: string, dto: UpdateCellDto) {
-    await this.findOne(id);
+  async update(id: string, dto: UpdateCellDto, file?: UploadFile) {
+    const cell = await this.findOne(id);
+
+    let content = dto.content ?? cell.content;
+
+    // Upload new file to S3 if provided
+    if (file) {
+      content = await this.awsService.uploadFile({
+        originalname: file.originalname,
+        buffer: file.buffer,
+        mimetype: file.mimetype,
+        size: file.size,
+      });
+    }
 
     try {
       return this.prisma.cell.update({
         where: { id },
-        data: dto,
+        data: {
+          ...dto,
+          content,
+        },
       });
     } catch {
       throw new InternalServerErrorException('Failed to update cell');
@@ -81,7 +119,7 @@ export class CellService {
   }
 
   //------------------------------------------------------
-  // BULK UPDATE CELLS
+  // BULK UPDATE CELLS (without files)
   //------------------------------------------------------
   async bulkUpdate(notebookId: string, dto: BulkUpdateCellsDto) {
     await this.notebooksService.findOne(notebookId);
