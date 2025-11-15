@@ -5,7 +5,6 @@ import { PrismaModule } from 'src/prisma/prisma.module';
 import { NotebooksModule } from 'src/notebooks/notebooks.module';
 import { UploadsModule } from 'src/uploads/uploads.module';
 import { CellModule } from 'src/cell/cell.module';
-import { AiModule } from 'src/ai/ai.module';
 import { ConfigModule } from '@nestjs/config';
 
 @Module({
@@ -15,7 +14,6 @@ import { ConfigModule } from '@nestjs/config';
       envFilePath: '.env',
     }),
     PrismaModule,
-    AiModule,
     NotebooksModule,
     UploadsModule,
     CellModule,
